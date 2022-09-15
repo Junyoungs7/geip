@@ -19,8 +19,8 @@ public class SecurityConfig {
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception{
         http
                 .authorizeRequests()
-                .antMatchers("/", "/css/**", "/img/**", "/js/**", "/lib/**", "/scss/**").permitAll()
-                .antMatchers("/index").hasRole(Role.USER.name())
+                .antMatchers("/loginform", "/css/**", "/img/**", "/js/**", "/lib/**", "/scss/**").permitAll()
+                .antMatchers("/").hasRole(Role.USER.name())
                 .anyRequest().authenticated()
                 .and()
                 .logout()
@@ -28,11 +28,13 @@ public class SecurityConfig {
                 .and()
                 .oauth2Login()
                 .userInfoEndpoint()
-                .userService(customOAuth2UserService)
-                .and()
-                .loginPage("/signin")
-                .defaultSuccessUrl("/index")
-                .failureUrl("/signin");
+                .userService(customOAuth2UserService);
+
+        http.formLogin()
+                .loginPage("/loginform")
+                .defaultSuccessUrl("/")
+                .failureUrl("/loginform");
+
         return http.build();
     }
 }

@@ -43,6 +43,7 @@
 
 
         <!-- Sign In Start -->
+
         <div class="container-fluid">
             <div class="row h-100 align-items-center justify-content-center" style="min-height: 100vh;">
                 <div class="col-12 col-sm-8 col-md-6 col-lg-5 col-xl-4">
@@ -51,13 +52,21 @@
                             <a href="index.html" class="">
                                 <h3 class="text-primary"><i class="fa fa-user-edit me-2"></i>GEIP</h3>
                             </a>
-                            <h3>Sign In</h3>
+                            <h3>롤 아이디 등록 OR 수정</h3>
                         </div>
-                        <a class="btn btn-primary py-3 w-100 mb-4" th:href="@{/oauth2/authorization/google}">Google Login</a>
+                        <form th:action="@{/saveorupdate}" th:object="${Nickname}" method="post">
+                            <div class="form-floating mb-3">
+                                <input type="text" class="form-control" id="floatingText" th:value="${userInfo.gameNickname}" th:field="*{gameNickname}" >
+                                <label for="floatingText">LoL Nickname</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary py-3 w-100 mb-4" th:href="@{/}">등록</button>
+                        </form>
+
                     </div>
                 </div>
             </div>
         </div>
+
         <!-- Sign In End -->
     </div>
 

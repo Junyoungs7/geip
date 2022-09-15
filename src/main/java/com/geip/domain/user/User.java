@@ -32,12 +32,20 @@ public class User extends BaseTimeEntity {
     @Enumerated(value = EnumType.STRING)
     private Role role;
 
+    @Column(name = "game_nickname")
+    private String gameNickname;
+
     @Builder
     public User(String name, String email, String picture, Role role){
         this.name = name;
         this.email = email;
         this.picture = picture;
         this.role = role;
+    }
+
+    public User nicknameUpdate(String gameNickname){
+        this.gameNickname = gameNickname;
+        return this;
     }
 
     public User update(String name, String picture){
