@@ -1,0 +1,27 @@
+
+
+.container {
+    font-family: "Trebuchet MS", sans-serif;
+    display: flex;
+    gap: 30px;
+}
+.column {
+    flex-basis: 20%;
+    background: #000000;
+    min-height: 60vh;
+    padding: 5px;
+    border-radius: 10px;
+}
+.column h1 {
+    text-align: center;
+    font-size: 22px;
+}
+
+.list-group-item {
+    background: #fff;
+    margin: 20px;
+    padding: 20px;
+    border-radius: 5px;
+    cursor: pointer;
+
+}
