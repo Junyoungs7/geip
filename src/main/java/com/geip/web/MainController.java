@@ -1,4 +1,4 @@
-package com.geip;
+package com.geip.web;
 
 import com.geip.config.auth.LoginUser;
 import com.geip.config.auth.dto.SessionUser;
@@ -16,7 +16,7 @@ import java.util.List;
 
 @Controller
 @RequiredArgsConstructor
-public class testController {
+public class MainController {
 
     private final UserService userService;
 

@@ -9,8 +9,8 @@ columns.forEach((column) => {
 
     column.addEventListener("drop", (e) => {
         e.preventDefault();
-        console.log('name1', e.currentTarget.querySelector(".name1").textContent);
-        console.log('name2', e.currentTarget.querySelector(".name2").textContent);
+        console.log('username', e.currentTarget.querySelector(".username").textContent);
+        console.log('gamename', e.currentTarget.querySelector(".gamename").textContent);
         console.log('target', e.currentTarget.closest('div').getAttribute("id"));
     });
 });
@@ -18,30 +18,41 @@ columns.forEach((column) => {
 var main={
     init : function (){
         var _this = this;
+
         $('#btn-save').on('click', function (){
             console.log("btn click....");
-            $('span.name1').forEach(function(index) {
-                console.log(index);
+            var _team_array = [];
+            var team = {};
+
+            $('div.container div').each(function(index, item) {
+                if(item.className == "column" && item.id.length > 0) {
+                    console.log("item", item, item.id);
+                    $("#"+item.id + ' span').each(function(index2, item2){
+                        let cnt = index2 + 1;
+                        if(item2.className == "username")
+                            team.username = item2.textContent;
+                        else
+                            team.gamename = item2.textContent;
+                        if((cnt % 2) == 0)
+                            _team_array.push({team : item.id, username : team.username, gamename : team.gamename});
+                    });
+                }
             });
-            //console.log($('span.name1').length);
-            //_this.save();
+
+            console.log(_team_array);
+            _this.save(_team_array);
         })
     },
-    save : function (){
-        var data = {
-            username: $('#username').val(),
-            gamename: $('#gamename').val()};
-
+    save : function (_team_array){
         $.ajax({
             type: 'POST',
             url: '/api/teambuilding',
             dataType: 'json',
             contentType: 'application/json; charset=utf-8',
-            data: JSON.stringify(data)
+            data: JSON.stringify(_team_array)
         }).done(function (){
             alert('저장되었습니다.')
-            console.log('name1' ,data.username);
-            console.log('name2' ,data.gamename);
+            console.log(_team_array);
         }).fail(function (error){
             alert(JSON.stringify(error));
         })
