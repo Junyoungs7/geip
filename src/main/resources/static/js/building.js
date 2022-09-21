@@ -20,7 +20,6 @@ var main={
         var _this = this;
 
         $('#btn-save').on('click', function (){
-            console.log("btn click....");
             var _team_array = [];
             var team = {};
 
@@ -39,7 +38,6 @@ var main={
                 }
             });
 
-            console.log(_team_array);
             _this.save(_team_array);
         })
     },
@@ -52,7 +50,6 @@ var main={
             data: JSON.stringify(_team_array)
         }).done(function (){
             alert('저장되었습니다.')
-            console.log(_team_array);
         }).fail(function (error){
             alert(JSON.stringify(error));
         })

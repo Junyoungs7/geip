@@ -35,6 +35,8 @@ public class SecurityConfig {
                 .defaultSuccessUrl("/")
                 .failureUrl("/loginform");
 
+        http.csrf().disable();
+
         return http.build();
     }
 }
