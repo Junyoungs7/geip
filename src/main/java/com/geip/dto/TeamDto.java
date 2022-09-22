@@ -11,5 +11,5 @@ public class TeamDto {
 
     private String team;
     private String username;
-    private String gamename;
+    private String rank;
 }

@@ -33,7 +33,7 @@ public class UserService {
     }
 
     @Transactional
-    public List<TeamBuildingDto> multiSearchNickname(String gameNicknames){
+    public List<TeamBuildingDto> multiSearchNicknameDB(String gameNicknames){
         List<String> gameNickname = Arrays.asList(gameNicknames.split(","));
 
         List<TeamBuildingDto> infoDtoList = new ArrayList<>();
@@ -44,5 +44,6 @@ public class UserService {
         }
         return infoDtoList;
     }
+
 
 }

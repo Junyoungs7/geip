@@ -10,7 +10,7 @@ columns.forEach((column) => {
     column.addEventListener("drop", (e) => {
         e.preventDefault();
         console.log('username', e.currentTarget.querySelector(".username").textContent);
-        console.log('gamename', e.currentTarget.querySelector(".gamename").textContent);
+        console.log('rank', e.currentTarget.querySelector(".rank").textContent);
         console.log('target', e.currentTarget.closest('div').getAttribute("id"));
     });
 });
@@ -30,10 +30,10 @@ var main={
                         let cnt = index2 + 1;
                         if(item2.className == "username")
                             team.username = item2.textContent;
-                        else
-                            team.gamename = item2.textContent;
-                        if((cnt % 2) == 0)
-                            _team_array.push({team : item.id, username : team.username, gamename : team.gamename});
+                        if(item2.className == "rank")
+                            team.rank = item2.textContent;
+                        if((cnt % 3) == 0)
+                            _team_array.push({team : item.id, username : team.username, rank : team.rank});
                     });
                 }
             });
@@ -42,6 +42,7 @@ var main={
         })
     },
     save : function (_team_array){
+        console.log(_team_array);
         $.ajax({
             type: 'POST',
             url: '/api/teambuilding',

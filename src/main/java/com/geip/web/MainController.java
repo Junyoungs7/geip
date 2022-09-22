@@ -25,16 +25,12 @@ public class MainController {
         MainUserInfoDto mainUserInfoDto = userService.mainUserInfoDto(sessionUser.getEmail());
         if(searchName == null)
         {
-            System.out.println("controller 1");
             model.addAttribute("userInfo", mainUserInfoDto);
             model.addAttribute("searchSummoner", new SummonerSearchDTO());
             return "index";
         }
         else {
-            System.out.println("controller 2");
             MainSummonerDTO mainSummonerDTO = riotApiService.SearchSummonerName(searchName);
-            System.out.println(mainSummonerDTO.toString());
-
             model.addAttribute("resultSearch", mainSummonerDTO);
             model.addAttribute("userInfo", mainUserInfoDto);
             model.addAttribute("searchSummoner", new SummonerSearchDTO());
@@ -73,12 +69,13 @@ public class MainController {
     }
 
     @PostMapping("/teamBuilding")
-    public String multiSearch(@ModelAttribute("multiSearchDto") MultiSearchDto multiSearchDto, Model model, @LoginUser SessionUser sessionUser){
+    public String multiSearch(@ModelAttribute("multiSearchDto") MultiSearchDto multiSearchDto, Model model, @LoginUser SessionUser sessionUser) throws JsonProcessingException {
         String userNicknames = multiSearchDto.getGameNicknames();
-        List<TeamBuildingDto> teamBuildingDtos = userService.multiSearchNickname(userNicknames);
+//        List<TeamBuildingDto> teamBuildingDtos = userService.multiSearchNicknameDB(userNicknames);
         MainUserInfoDto mainUserInfoDto = userService.mainUserInfoDto(sessionUser.getEmail());
+        List<TeamBuildingRiotApiDTO> teamBuildingRiotApiDTOS = riotApiService.teamBuildingSearchSummoner(userNicknames);
         model.addAttribute("userInfo", mainUserInfoDto);
-        model.addAttribute("multiSearchList", teamBuildingDtos);
+        model.addAttribute("multiSearchList", teamBuildingRiotApiDTOS);
         return "teamBuilding";
     }
 

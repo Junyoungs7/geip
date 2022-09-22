@@ -1,10 +1,7 @@
 package com.geip.web;
 
-import com.geip.dto.SuccessTeamBuildingDto;
 import com.geip.dto.TeamDto;
 import lombok.RequiredArgsConstructor;
-import net.minidev.json.JSONArray;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +16,7 @@ public class TeamBuildingApiController {
     @PostMapping("/api/teambuilding")
     public List<TeamDto> teamBuild(@RequestBody List<TeamDto> teamDtos){
         System.out.println(teamDtos.toString());
+        System.out.println(teamDtos.size());
 
         for( TeamDto teamDto : teamDtos){
             System.out.println(teamDto.toString());
