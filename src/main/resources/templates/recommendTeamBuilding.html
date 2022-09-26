@@ -185,6 +185,7 @@
             <div class="container-fluid pt-4 px-4">
                 <div class="row vh-100 bg-secondary rounded align-items-center justify-content-center mx-0">
                     <div class="col-md-6 text-center">
+                        <h1>내전 팀 짜기</h1>
                         <form th:action="@{/recommendTeamBuilding}" th:object="${multiSearchDto}" method="post">
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="floatingText" th:field="*{gameNicknames}" >
@@ -195,14 +196,15 @@
                         <div class="container">
                             <div class="column" id="team_red">
                                 <h1 style="color:red;">TEAM RED</h1>
+                                <div class="list-group-item" draggable="true"  th:each="redTeam : ${redTeam}" ><span class="username" th:text="${redTeam.name}"></span><br><span class="rank" th:text="|${redTeam.tier} ${redTeam.rank}|"></span><br><span th:text="|승: ${redTeam.wins} 패:${redTeam.losses}|"></span></div>
                             </div>
                             <div class="column">
                                 <h1>Players</h1>
-                                <div class="list-group-item" draggable="true"  th:each="multiSearchList : ${multiSearchList}" ><span class="username" th:text="${multiSearchList.name}"></span><br><span class="rank" th:text="|${multiSearchList.tier} ${multiSearchList.rank}|"></span><br><span th:text="|승: ${multiSearchList.wins} 패:${multiSearchList.losses}|"></span></div>
 
                             </div>
                             <div class="column" id="team_blue">
                                 <h1 style="color:blue;">TEAM BLUE</h1>
+                                <div class="list-group-item" draggable="true"  th:each="blueTeam : ${blueTeam}" ><span class="username" th:text="${blueTeam.name}"></span><br><span class="rank" th:text="|${blueTeam.tier} ${blueTeam.rank}|"></span><br><span th:text="|승: ${blueTeam.wins} 패:${blueTeam.losses}|"></span></div>
                             </div>
                         </div>
                         <button id="btn-save" type="button" class="btn btn-primary py-3 w-100 mb-4">저장</button>
