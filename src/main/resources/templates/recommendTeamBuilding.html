@@ -185,7 +185,7 @@
             <div class="container-fluid pt-4 px-4">
                 <div class="row vh-100 bg-secondary rounded align-items-center justify-content-center mx-0">
                     <div class="col-md-6 text-center">
-                        <form th:action="@{/teamBuilding}" th:object="${multiSearchDto}" method="post">
+                        <form th:action="@{/recommendTeamBuilding}" th:object="${multiSearchDto}" method="post">
                             <div class="form-floating mb-3">
                                 <input type="text" class="form-control" id="floatingText" th:field="*{gameNicknames}" >
                                 <label for="floatingText">소환사 멀티 서치 : ,로 구분해주세요.</label>

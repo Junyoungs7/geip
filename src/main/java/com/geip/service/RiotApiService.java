@@ -2,19 +2,14 @@ package com.geip.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.geip.dto.LeagueEntryDTO;
-import com.geip.dto.MainSummonerDTO;
-import com.geip.dto.SummonerDTO;
-import com.geip.dto.TeamBuildingRiotApiDTO;
+import com.geip.dto.*;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.reactive.function.client.WebClient;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class RiotApiService {
@@ -99,7 +94,7 @@ public class RiotApiService {
             if(leagueEntryDTOS.size() == 1){
                 leagueEntryDTO = leagueEntryDTOS.get(0);
             } else if(leagueEntryDTOS.size() == 2 ){
-                if(leagueEntryDTOS.get(0).getQueueType() == "RANKED_SOLO_5x5")
+                if(leagueEntryDTOS.get(0).getQueueType().equals("RANKED_SOLO_5x5"))
                     leagueEntryDTO = leagueEntryDTOS.get(0);
                 else
                     leagueEntryDTO = leagueEntryDTOS.get(1);
@@ -111,6 +106,89 @@ public class RiotApiService {
             teamBuildingRiotApiDTOS.add(teamBuildingRiotApiDTO);
         }
         return teamBuildingRiotApiDTOS;
+
+    }
+
+    @Transactional
+    public RecommendTBAndControllerDTO recommendTeamBuilding(String names) throws JsonProcessingException {
+        List<TeamBuildingRiotApiDTO> searchSummoners = teamBuildingSearchSummoner(names);
+        List<RecommendTeamBuildingDto> recommendTeamBuildingDtoList = new ArrayList<>();
+        List<RecommendTeamBuildingDto> redTeam = new ArrayList<>();
+        List<RecommendTeamBuildingDto> blueTeam = new ArrayList<>();
+
+        for(TeamBuildingRiotApiDTO teamBuildingRiotApiDTO : searchSummoners){
+            int point = 0;
+            switch (teamBuildingRiotApiDTO.getTier()){
+                case "CHALLENGER":
+                    point = 9;
+                    break;
+                case "GRANDMASTER":
+                    point = 8;
+                    break;
+                case "MASTER":
+                    point = 7;
+                    break;
+                case "DIAMOND":
+                    point = 6;
+                    break;
+                case "PLATINUM":
+                    point = 5;
+                    break;
+                case "GOLD":
+                    point = 4;
+                    break;
+                case "SILVER":
+                    point = 3;
+                    break;
+                case "BRONZE":
+                    point = 2;
+                    break;
+                case "IRON":
+                    point = 1;
+                    break;
+            }
+            RecommendTeamBuildingDto recommendTeamBuildingDto = RecommendTeamBuildingDto.builder()
+                    .name(teamBuildingRiotApiDTO.getName())
+                    .rank(teamBuildingRiotApiDTO.getRank())
+                    .tier(teamBuildingRiotApiDTO.getTier())
+                    .wins(teamBuildingRiotApiDTO.getWins())
+                    .losses(teamBuildingRiotApiDTO.getLosses())
+                    .point(point)
+                    .build();
+            recommendTeamBuildingDtoList.add(recommendTeamBuildingDto);
+        }
+        recommendTeamBuildingDtoList = recommendTeamBuildingDtoList.stream().sorted(Comparator.comparing(RecommendTeamBuildingDto::getPoint).reversed()).collect(Collectors.toList());
+
+        for(int i = 0; i < recommendTeamBuildingDtoList.size(); i++){
+            if(i%2 == 0){
+                redTeam.add(recommendTeamBuildingDtoList.get(i));
+            }else{
+                blueTeam.add(recommendTeamBuildingDtoList.get(i));
+            }
+
+        }
+
+        for(int i = 1; i < redTeam.size(); i++){
+            if(redTeam.get(i-1).getPoint() > blueTeam.get(i-1).getPoint()){
+                if(redTeam.get(i).getPoint() > blueTeam.get(i).getPoint()){
+                    RecommendTeamBuildingDto temp1 = redTeam.get(i);
+                    RecommendTeamBuildingDto temp2 = blueTeam.get(i);
+                    redTeam.set(i, temp2);
+                    blueTeam.set(i, temp1);
+                }
+            }else if(redTeam.get(i-1).getPoint() < blueTeam.get(i-1).getPoint()){
+                if(redTeam.get(i).getPoint() < blueTeam.get(i).getPoint()){
+                    RecommendTeamBuildingDto temp1 = redTeam.get(i);
+                    RecommendTeamBuildingDto temp2 = blueTeam.get(i);
+                    redTeam.set(i, temp2);
+                    blueTeam.set(i, temp1);
+                }
+            }
+        }
+        RecommendTBAndControllerDTO recommendTBAndControllerDTO = new RecommendTBAndControllerDTO();
+        recommendTBAndControllerDTO.setRedTeam(redTeam);
+        recommendTBAndControllerDTO.setBlueTeam(blueTeam);
+        return recommendTBAndControllerDTO;
 
     }
 

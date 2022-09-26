@@ -71,12 +71,19 @@ public class MainController {
     @PostMapping("/teamBuilding")
     public String multiSearch(@ModelAttribute("multiSearchDto") MultiSearchDto multiSearchDto, Model model, @LoginUser SessionUser sessionUser) throws JsonProcessingException {
         String userNicknames = multiSearchDto.getGameNicknames();
-//        List<TeamBuildingDto> teamBuildingDtos = userService.multiSearchNicknameDB(userNicknames);
         MainUserInfoDto mainUserInfoDto = userService.mainUserInfoDto(sessionUser.getEmail());
         List<TeamBuildingRiotApiDTO> teamBuildingRiotApiDTOS = riotApiService.teamBuildingSearchSummoner(userNicknames);
         model.addAttribute("userInfo", mainUserInfoDto);
         model.addAttribute("multiSearchList", teamBuildingRiotApiDTOS);
         return "teamBuilding";
+    }
+
+
+    @GetMapping("/test")
+    public String test() throws JsonProcessingException {
+        String names = "grjun, hideonbush, 엉덩국 갱승제로, 미션충 권상윤, 난화내, 아헤가오더블피스, 흐예나, 흐예나팬";
+        riotApiService.recommendTeamBuilding(names);
+        return null;
     }
 
 }
